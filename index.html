@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101114">
+  <meta name="description" content="GymLog Ember — บันทึกทุกเซต เลือกท่าจากภาพกล้ามเนื้อ">
+  <title>GymLog — Ember</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="styles.css?v=18">
+  <script src="js/store.js?v=10" defer></script>
+  <script src="js/catalog.js?v=10" defer></script>
+  <script src="js/anatomy-regions.js?v=18" defer></script>
+  <script src="js/anatomy-map.js?v=18" defer></script>
+  <script src="js/app.js?v=18" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">ข้ามไปเนื้อหา</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="GymLog หน้าแรก"><span class="brand-mark" aria-hidden="true">G</span><span>GYMLOG<span class="brand-dot">.</span></span></a>
+    <nav class="desktop-nav" aria-label="เมนูหลัก">
+      <button class="nav-link active" data-page="log" aria-current="page"><span data-icon="dumbbell"></span>บันทึก</button>
+      <button class="nav-link" data-page="summary"><span data-icon="chart"></span>สรุปการฝึก</button>
+      <button class="nav-link" data-page="data"><span data-icon="folder"></span>ข้อมูลของฉัน</button>
+    </nav>
+    <div class="header-right"><span class="edition">Ember edition</span><span class="profile" aria-label="โหมดส่วนตัว">H</span></div>
+  </header>
+  <main id="main" class="workspace">
+    <div class="demo-banner" id="demo-banner"><span><span class="demo-dot"></span><strong>โหมดทดลอง</strong><span class="demo-copy"> ข้อมูลตัวอย่าง ลองแก้ไขได้เลย</span></span><button id="start-personal">เริ่มบันทึกของฉัน <span aria-hidden="true">↗</span></button></div>
+    <div class="personal-banner" id="personal-banner" hidden><span><span class="live-dot"></span>บันทึกส่วนตัว · เก็บบนเบราว์เซอร์นี้</span><button id="show-demo">ดูข้อมูลตัวอย่าง</button></div>
+
+    <section id="page-log" class="page">
+      <div class="page-heading"><div><p class="date-eyebrow" id="date-label"></p><h1 id="log-title">วันนี้เล่นอะไร<span>?</span></h1><p class="intro">เลือกกล้ามเนื้อ แล้วเก็บทุกเซตของคุณ</p></div><div class="date-actions"><button class="icon-button" id="previous-day" aria-label="วันก่อนหน้า"><span data-icon="left"></span></button><label class="date-input"><span data-icon="calendar"></span><input id="session-date" type="date" aria-label="วันที่บันทึก"></label><button class="icon-button" id="next-day" aria-label="วันถัดไป"><span data-icon="right"></span></button></div></div>
+      <div class="backdate-banner" id="backdate-banner" hidden><span>กำลังจดย้อนหลัง · <strong id="backdate-label"></strong></span><button id="back-to-today">กลับไปวันนี้</button></div>
+      <button id="quick-search" class="quick-search"><span data-icon="search"></span><span>ค้นหาชื่อท่า ไทย / English</span><span class="quick-search-hint">หรือเลือกจากร่างกายด้านล่าง</span></button>
+      <div class="training-layout">
+        <section class="anatomy-panel" aria-label="เลือกกล้ามเนื้อจากภาพ anatomy">
+          <div class="panel-heading"><div><h2>เลือกส่วนที่ฝึก</h2><p>แตะบนร่างกายเพื่อค้นหาท่า</p></div><button class="icon-button collapse-body" id="collapse-body" aria-label="ย่อภาพร่างกาย" aria-expanded="true"><span data-icon="minimize"></span></button></div>
+          <div id="body-area">
+            <div class="body-switch" role="group" aria-label="มุมมองร่างกาย"><button data-view="front" aria-pressed="true" class="active">ด้านหน้า</button><button data-view="back" aria-pressed="false">ด้านหลัง</button></div>
+            <div class="anatomy-stage"><div class="anatomy-orbit" aria-hidden="true"></div><svg id="anatomy" viewBox="225 0 440 1000" role="group" aria-label="ภาพร่างกายด้านหน้า กดกลุ่มกล้ามเนื้อเพื่อเลือก"><defs><clipPath id="body-crop"><rect id="body-crop-rect" x="225" y="0" width="440" height="1000"/></clipPath><mask id="body-alpha" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1536" height="1024"><image href="assets/anatomy-cutout.webp?v=6" width="1536" height="1024"/></mask></defs><g clip-path="url(#body-crop)"><image href="assets/anatomy-cutout.webp?v=6" width="1536" height="1024"/><g id="muscle-regions"></g></g></svg><div class="body-tag"><span class="selection-dot"></span><span id="body-tag-name">ไหล่</span><span id="body-tag-en">Shoulders</span></div><span class="body-caption">ภาพ anatomy · แตะเลือกได้</span></div>
+            <p id="image-error" class="error-note" hidden>โหลดภาพไม่สำเร็จ เลือกจากปุ่มกล้ามเนื้อด้านล่างได้</p>
+          </div>
+          <div id="muscle-chips" class="muscle-chips" aria-label="เลือกกลุ่มกล้ามเนื้อ"></div>
+        </section>
+
+        <div class="workout-column">
+          <section class="session-panel" aria-labelledby="session-heading">
+            <div class="session-top"><div><div class="section-kicker"><span class="live-dot"></span><span id="session-kicker">การฝึกวันนี้</span></div><h2 id="session-heading">บันทึกการฝึก<span>.</span></h2></div><div class="save-status" id="save-status" role="status"><span data-icon="check"></span>พร้อมจด</div></div>
+            <div class="session-counts" id="session-counts"></div>
+            <div id="exercise-log"></div>
+            <button class="add-exercise-button" id="add-exercise"><span data-icon="plus"></span>เพิ่มท่าออกกำลังกาย</button>
+          </section>
+          <div id="browser-home"><section class="exercise-browser" id="exercise-browser" aria-labelledby="browser-heading">
+            <div class="browser-title"><h2 id="browser-heading">ท่าสำหรับไหล่</h2><button class="text-button" id="clear-muscle">ดูทุกส่วน</button></div>
+            <label class="search-field"><span data-icon="search"></span><input id="exercise-search" type="search" placeholder="ค้นหาชื่อท่า ไทย / English" autocomplete="off" aria-label="ค้นหาท่าออกกำลังกาย"><span class="search-key" aria-hidden="true">/</span></label>
+            <div id="recent-exercises" class="recent-row" hidden></div>
+            <div class="filter-row" role="group" aria-label="กรองอุปกรณ์"><button class="filter-chip active" data-equipment="" aria-pressed="true">ทั้งหมด</button><button class="filter-chip" data-equipment="dumbbell" aria-pressed="false">ดัมเบล</button><button class="filter-chip" data-equipment="machine" aria-pressed="false">เครื่องในยิม</button><span id="result-count"></span></div>
+            <div class="exercise-results" id="exercise-results"></div>
+          </section></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-summary" class="page" hidden>
+      <div class="page-heading"><div><p class="date-eyebrow">ทุกครั้งที่กลับมา คือความก้าวหน้า</p><h1>มองเห็นการฝึก<span>.</span></h1><p class="intro">จากเซตที่คุณยืนยันว่าทำแล้ว</p></div><label class="period-label">ช่วงเวลา<select id="summary-period"><option value="30">30 วันล่าสุด</option><option value="7">7 วันล่าสุด</option><option value="all">ทั้งหมด</option></select></label></div>
+      <div id="summary-content"></div>
+    </section>
+
+    <section id="page-data" class="page" hidden>
+      <div class="page-heading"><div><p class="date-eyebrow">เก็บไว้ ไปต่อได้</p><h1>ข้อมูลของฉัน<span>.</span></h1><p class="intro">บันทึกอยู่ในเบราว์เซอร์และอุปกรณ์ที่กำลังใช้</p></div></div>
+      <div class="data-grid"><article class="data-card"><span class="large-icon" data-icon="download"></span><h2>สำรองบันทึก</h2><p>ส่งออกเป็นไฟล์ JSON เพื่อเก็บสำรอง หรือนำไปเปิดบนอีกอุปกรณ์</p><button class="primary-button" id="export-data">ส่งออกข้อมูล</button></article><article class="data-card"><span class="large-icon" data-icon="upload"></span><h2>นำบันทึกกลับมา</h2><p>เลือกไฟล์จาก GymLog ระบบจะตรวจข้อมูลก่อนขอยืนยันการแทนที่</p><button class="secondary-button" id="import-data">นำเข้าไฟล์ JSON</button><input id="import-file" type="file" accept=".json,application/json" hidden></article></div>
+      <div class="storage-note"><span data-icon="info"></span><div><h3>ยังไม่ซิงก์ระหว่างมือถือกับคอม</h3><p>ใช้ส่งออกและนำเข้าเพื่อย้ายบันทึก การล้างข้อมูลเบราว์เซอร์อาจลบบันทึกด้วย ควรเก็บไฟล์สำรองไว้</p><p id="data-mode-note"></p></div></div>
+      <details class="about-mock"><summary>เกี่ยวกับ mock นี้</summary><p>GymLog Ember เป็น HTML prototype ภาพ anatomy เป็นภาพคอนเซปต์ที่สร้างด้วย AI และสลับหน้า–หลังได้ ไม่ใช่โมเดล 3D หมุนได้ ภาพเล็กของท่าเป็นแผนภาพช่วยจำ ยังไม่ใช่วิดีโอสอนฟอร์ม</p><p>รอบนี้เน้นบันทึกและดูสรุป การจัดโปรแกรมและระบบเทรนเนอร์เป็นเฟสถัดไป</p></details>
+    </section>
+    <footer class="site-footer"><span>GYMLOG / EMBER</span><span>ทีละเซต ในแบบของคุณ</span><span>HTML prototype</span></footer>
+  </main>
+  <nav class="mobile-nav" aria-label="เมนูมือถือ"><button class="active" data-page="log" aria-current="page"><span data-icon="dumbbell"></span><span>บันทึก</span></button><button data-page="summary"><span data-icon="chart"></span><span>สรุป</span></button><button data-page="data"><span data-icon="folder"></span><span>ข้อมูล</span></button></nav>
+  <dialog id="catalog-dialog" class="catalog-dialog" aria-label="ค้นหาและเลือกท่า"><button id="catalog-close" class="dialog-close icon-button" aria-label="ปิดการค้นหา"><span data-icon="close"></span></button><div id="catalog-slot"></div></dialog>
+  <dialog id="exercise-dialog" class="exercise-dialog"><button class="dialog-close icon-button" aria-label="ปิดรายละเอียดท่า"><span data-icon="close"></span></button><div id="exercise-detail"></div></dialog>
+  <dialog id="confirm-dialog" class="confirm-dialog"><h2 id="confirm-title"></h2><p id="confirm-copy"></p><div class="dialog-actions"><button class="secondary-button" id="confirm-cancel">ยกเลิก</button><button class="primary-button" id="confirm-accept">ยืนยัน</button></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
