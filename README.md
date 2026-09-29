@@ -4,6 +4,16 @@
 
 ## เปิดใช้งาน
 
+**ออนไลน์:** https://h3leyassistant.github.io/gymlog-app/ (GitHub Pages จาก repo public `h3leyassistant/gymlog-app` ซึ่งมีเฉพาะโฟลเดอร์นี้ ส่วน repo หลัก `gymlog` เป็น private) บันทึกเก็บใน localStorage ของเบราว์เซอร์ที่เปิดลิงก์นี้ แยกจากบันทึกที่จดบน localhost
+
+อัปเดตเว็บหลัง commit ใน repo หลัก (รันที่โฟลเดอร์ GymLog):
+
+```bash
+git push pages "$(git subtree split --prefix=mock/ember)":main
+```
+
+**ในเครื่อง:**
+
 จากโฟลเดอร์ `mock/ember` รัน:
 
 ```powershell
